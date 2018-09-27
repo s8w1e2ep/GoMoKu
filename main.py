@@ -2,9 +2,9 @@
 #-*- coding: utf-8 -*-
 
 import GUI
-import Tkinter
+import tkinter
 import os
-from Tkinter import Button
+from tkinter import Button
 
 def callback():
     cmd = 'python main.py'
@@ -12,7 +12,7 @@ def callback():
     exit(0)
 
 if __name__ == '__main__':
-    window = Tkinter.Tk()
+    window = tkinter.Tk()
     gui_chess_board = GUI.Chess_Board_Frame(window)
 
     b = Button(window, text="Restart", command=callback)

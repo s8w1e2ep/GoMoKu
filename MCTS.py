@@ -15,52 +15,52 @@ class Board:
         count = np.array([1] * 4)
         state = np.array(state).reshape(15, 15)
         # 直線 |
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (i + shift) < 15:
                 if(state[i + shift][j] == player):
                     count[0] += 1
                 else:
                     break
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (i - shift) > -1:
                 if(state[i - shift][j] == player):
                     count[0] += 1
                 else:
                     break
         # 橫線 -
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (j + shift) < 15:
                 if (state[i][j + shift] == player):
                     count[1] += 1
                 else:
                     break
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (j + shift) < 15:
                 if (state[i][j - shift] == player):
                     count[1] += 1
                 else:
                     break
         # 斜線 /
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (i - shift) > -1 and (j + shift) < 15:
                 if (state[i - shift][j + shift] == player):
                     count[2] += 1
                 else:
                     break
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (i + shift) < 15 and (j - shift) > -1:
                 if (state[i + shift][j - shift] == player):
                     count[2] += 1
                 else:
                     break
         # 反斜線 \
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (i + shift) < 15 and (j + shift) < 15:
                 if (state[i + shift][j + shift] == player):
                     count[3] += 1
                 else:
                     break
-        for shift in xrange(1, 5):
+        for shift in range(1, 5):
             if (i - shift) > -1 and (j - shift) > -1:
                 if (state[i - shift][j - shift] == player):
                     count[3] += 1
@@ -73,24 +73,24 @@ class Board:
             return False
     # 顯示盤面
     def display(self):
-        for i in xrange(17):
-            if(i == 0 or i == 1):
-                print ' ',
-            for j in xrange(16):
-                if(i == 0 and j != 15):
-                    print ' ' + format(j, 'x'),
-                elif(i == 1 and j != 15):
-                    print '{:>2}'.format('='),
-                elif(j == 0):
-                    print format((i - 2), 'x') + '|',
-                elif(i != 0 and i != 1):
-                    if(self.state[(i - 2)][(j -1)] == 0):
-                        print '{:2}'.format('-'),
-                    elif(self.state[(i - 2)][(j -1)] == 1):
-                        print '{:2}'.format('X'),
+        for i in range(17):
+            if i == 0 or i == 1:
+                print(' ')
+            for j in range(16):
+                if i == 0 and j != 15:
+                    print(' ' + format(j, 'x'))
+                elif i == 1 and j != 15:
+                    print('{:>2}'.format('='))
+                elif j == 0:
+                    print(format((i - 2), 'x') + '|')
+                elif i != 0 and i != 1:
+                    if self.state[(i - 2)][(j -1)] == 0:
+                        print('{:2}'.format('-'))
+                    elif self.state[(i - 2)][(j -1)] == 1:
+                        print('{:2}'.format('X'))
                     else:
-                        print '{:2}'.format('O'),
-            print ''
+                        print('{:2}'.format('O'))
+            print('')
     # 回傳此回合玩家
     def currentPlayer(self, state):
         state = np.array(state)
@@ -138,15 +138,15 @@ class MonteCarlo(object):
         if(flag == 0):
             tem_value = list(self.value.reshape(1, 225)[0])
             temp_value = []
-            for i in xrange(len(tem_value)):
+            for i in range(len(tem_value)):
                 temp_value.append((tem_value[i], i))
             temp_value = sorted(temp_value, key=lambda s : s[0],reverse=True)
             move = []
             if(temp_value[0][0] > 40000):
                 index = temp_value[0][1]
-                move.append((index/15, index%15))
+                move.append((index//15, index%15))
             else:
-                temp = [(index/15, index%15) for (val, index) in temp_value]
+                temp = [(index//15, index%15) for (val, index) in temp_value]
                 if(temp_value[0][0] > 3000 and temp_value[0][0] / float(temp_value[1][0]) > 1.5):
                     move.append(temp[0])
                 elif(temp_value[0][0] > 3000 and temp_value[0][0] / float(temp_value[2][0]) > 1.5):
@@ -175,13 +175,13 @@ class MonteCarlo(object):
                 else:
                     return moves
             else:
-    			state = np.array(state).reshape(1, 225)[0]
-    			moves = [(pos / 15, pos % 15) for pos in np.where(state == 0)[0]]
+                   state = np.array(state).reshape(1, 225)[0]
+                   moves = [(pos / 15, pos % 15) for pos in np.where(state == 0)[0]]
 
-    			if (len(moves) == 225):
-    				return ([(pos / 15, pos % 15) for pos in np.where(state == 0)[0] if (pos / 15 < 2 or pos / 15 > 12) or (pos % 15 < 2 or pos % 15 > 12)])
-    			else:
-    				return moves
+                   if (len(moves) == 225):
+                        return ([(pos / 15, pos % 15) for pos in np.where(state == 0)[0] if (pos / 15 < 2 or pos / 15 > 12) or (pos % 15 < 2 or pos % 15 > 12)])
+                   else:
+                        return moves
     # 找出最好的走法
     def bestAction(self):
         # 找出最佳下法
@@ -204,7 +204,7 @@ class MonteCarlo(object):
         moves_states = [(pos, self.updateState(state, pos, self.player).reshape(1, 225)[0]) for pos in moves]
         # 確認模擬次數，時間
         #print 'Turn: {0},
-	print 'Time: {0}(s)'.format(time.time() - begin)
+        print('Time: {0}(s)'.format(time.time() - begin))
         # print 'Play: {}, Win: {}'.format(self.plays.values(), self.wins.values())
         # 選擇最大勝率的走法
         totalMoves = []
@@ -247,8 +247,8 @@ class MonteCarlo(object):
         player = self.player
 
         expand = True
-	pos = (-1,-1)
-        for t in xrange(1, self.MAX_MOVE + 1):
+        pos = (-1,-1)
+        for t in range(1, self.MAX_MOVE + 1):
             # player = 1 << ((t + 1) % 2)
             moves = self.legalMoves(state,pos)
             if len(moves) == 0:
@@ -264,13 +264,13 @@ class MonteCarlo(object):
                 total = log(np.sum(play))
                 # 取得最大UCB1值state的action
                 ucb = [((wins[(player, tuple(s))] / plays[(player, tuple(s))]) + self.C * np.sqrt(total / plays[(player, tuple(s))]), (pos, s)) for pos, s in moves_state]
-		print ucb
+                print(ucb)
                 val, move_s = max(ucb)
                 pos, state = move_s[0], move_s[1]
             else:
                 pos, state = choice(moves_state) #self.valueNet(moves, state, player)#choice(moves)
                 # state = self.updateState(state, pos, player)
-	    print state
+                print(state)
             # 設定初始值
             if (expand and (player, tuple(state)) not in plays):
                 expand = False
@@ -302,41 +302,3 @@ class MonteCarlo(object):
         temp = np.array(temp).reshape(15, 15)
         temp[action[0]][action[1]] = player
         return temp
-
-"""if __name__=="__main__":
-    board = Board()
-    STATE = np.copy(board.state)
-    p1 = MonteCarlo(board, 1)
-    p2 = MonteCarlo(board, 2)
-
-    board.display()
-
-    turn = 0
-    action2 = (-1, -1)
-    while True:
-        # Player 1
-        p1.update(board.state)
-        action1 = p1.bestAction(turn, action2)
-        print 'Turn: {}, p1: {}'.format(turn, action1)
-        STATE[action1[0]][action1[1]] = p1.player
-        board.state = np.copy(STATE)
-        board.display()
-        if board.isWin(STATE, action1, p1.player):
-            break
-        turn += 1
-        p2.update(board.state)
-        # Player 2
-        action2 = p2.bestAction(turn, action1)
-        print 'Turn: {}, p2: {}'.format(turn, action2)
-        STATE[action2[0]][action2[1]] = p2.player
-        board.state = np.copy(STATE)
-        board.display()
-        turn += 1
-        if board.isWin(STATE, action2, p2.player):
-            break
-
-    win = board.currentPlayer(STATE)
-    if (win == 1):
-        print 'Black is win.'
-    elif (win == 2):
-        print 'White is win.'"""
